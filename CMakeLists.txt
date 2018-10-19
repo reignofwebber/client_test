@@ -8,3 +8,4 @@ project ("testclient")
 
 # Include sub-projects.
 add_subdirectory ("testclient")
+add_subdirectory (telnet)

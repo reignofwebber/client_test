@@ -4,32 +4,30 @@
 #include <thread>
 #include <chrono>
 
-#include "data.h"
+#include "client.h"
 
 using boost::asio::ip::tcp;
 
-int main(void)
+int main(int argc, char** argv)
 {
 	try
 	{
+		int train_no = 0;
+		if (argc != 1)
+		{
+			train_no = std::stoi(argv[1]);
+		}
+
 		boost::asio::io_context io_context;
 
 		tcp::resolver resolver(io_context);
 		auto endpoints =
 			resolver.resolve("10.50.200.66", "19999");
 
-		tcp::socket socket(io_context);
-		boost::asio::connect(socket, endpoints);
 
-		boost::system::error_code ignored_error;
-		
-		while (true)
-		{
-			boost::asio::const_buffer buf = MsgFactory::getMsgBuffer();
-			boost::asio::write(socket, buf, ignored_error);
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-		}
-		
+		Client client(io_context, endpoints, train_no);
+
+		io_context.run();
 	}
 	catch (std::exception &e)
 	{
