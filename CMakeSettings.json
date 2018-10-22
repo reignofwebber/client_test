@@ -9,7 +9,7 @@
       ],
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
-      "cmakeCommandArgs": "",
+      "cmakeCommandArgs": "-DCMAKE_PREFIX_PATH=E:\\_Developer\\Environment\\vcpkg\\installed\\x64-windows",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": ""
     },

@@ -7,7 +7,7 @@ cmake_minimum_required (VERSION 3.8)
 find_package(Boost REQUIRED COMPONENTS system thread regex)
 
 message(${Boost_INCLUDE_DIRS})
-
+message(${Boost_LIBRARIES})
 
 add_executable(TestClient client.h
                           message.h

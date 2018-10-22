@@ -24,8 +24,8 @@ class Message
 	const size_t live_msg_len = 100;
 
 	const size_t reserve_len = 35;
-	const size_t status_len = 1440 - 4;
-	const size_t error_len = 1922 - 1508;
+	const uint16_t status_len = 1440 - 4;
+	const uint16_t error_len = 1922 - 1508;
 
 	const size_t tail_offset = 35 + 1922;
 

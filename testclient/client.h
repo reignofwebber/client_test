@@ -41,7 +41,14 @@ private:
 		{
 			if (!ec)
 			{
-				do_write();
+				if (std::rand() % 2)
+				{
+					do_snip_write();
+				}
+				else
+				{
+					do_write();
+				}
 			}
 			else
 			{
@@ -49,6 +56,52 @@ private:
 				std::this_thread::sleep_for(std::chrono::seconds(1));
 				do_connect();
 			}
+		});
+	}
+
+	void do_snip_write()
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		auto msgPtr = std::make_shared<Message>(MsgType::STATUS_MSG);
+
+		msgPtr->setTrainNo(train_no_);
+		msgPtr->randomMsg();
+		uint8_t *t_data = msgPtr->data();
+		auto type = msgPtr->type();
+
+		boost::asio::write(socket_, boost::asio::buffer(t_data, 1460));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		boost::asio::async_write(socket_, boost::asio::buffer(t_data+1460, msgPtr->length()-1460), 
+			[this, msgPtr](boost::system::error_code ec, size_t /*length*/)
+		{
+			if (!ec)
+			{
+				if (msgPtr->type() == STATUS_MSG)
+				{
+					do_read();
+				}
+				else
+				{
+					if (std::rand() % 2)
+					{
+						do_snip_write();
+					}
+					else
+					{
+						do_write();
+					}
+
+				}
+
+			}
+			else
+			{
+				std::cout << "write error " << ec.message() << ec.value();
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+				//do_connect();
+			}
+
 		});
 	}
 
@@ -84,7 +137,14 @@ private:
 				}
 				else
 				{
-					do_write();
+					if (std::rand() % 2)
+					{
+						do_snip_write();
+					}
+					else
+					{
+						do_write();
+					}
 				}
 
 			}
@@ -107,7 +167,15 @@ private:
 			if (!ec)
 			{
 				std::cout << "receive msg" << std::endl;
-				do_write();
+				if (std::rand() % 2)
+				{
+					do_snip_write();
+				}
+				else
+				{
+					do_write();
+				}
+
 			}
 			else
 			{
